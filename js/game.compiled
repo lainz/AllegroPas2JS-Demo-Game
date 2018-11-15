@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\fpcupdeluxe\fpc\bin\i386-win32\pas2js.exe" Date="1299013838"/>
+  <Params Value=" -Tbrowser -Pecmascript5 -MObjFPC -Sc -O1 -l -vewnhibq -FiC:\Users\Damian\Documents\Proyectos\allegrojspas\js -FuC:\Users\Damian\Documents\Proyectos\allegrojspas\ -FUC:\Users\Damian\Documents\Proyectos\allegrojspas\js\ -FEC:\Users\Damian\Documents\Proyectos\allegrojspas\ -oC:\Users\Damian\Documents\Proyectos\allegrojspas\game.js -Jeutf-8 -Jirtl.js -Jc -Jminclude game.lpr"/>
+</CONFIG>
