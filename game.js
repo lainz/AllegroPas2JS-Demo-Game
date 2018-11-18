@@ -1605,11 +1605,15 @@ rtl.module("Classes",["System","SysUtils"],function () {
   var $impl = $mod.$impl;
   $impl.ClassList = null;
 });
+rtl.module("Web",["System","JS"],function () {
+  "use strict";
+  var $mod = this;
+});
 rtl.module("allegrojs",["System","JS","Classes","SysUtils"],function () {
   "use strict";
   var $mod = this;
 });
-rtl.module("program",["System","JS","Classes","SysUtils","allegrojs"],function () {
+rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],function () {
   "use strict";
   var $mod = this;
   this.man = null;
@@ -1645,12 +1649,13 @@ rtl.module("program",["System","JS","Classes","SysUtils","allegrojs"],function (
     draw_sprite(canvas,$mod.apple,$mod.apple_x,$mod.apple_y);
     textout(canvas,font,"Score: " + pas.SysUtils.FloatToStr($mod.score),10,30,24,makecol(255,255,255,255),makecol(0,0,0,255),1);
   };
-  this.main_game = function () {
+  this.main_game = function (aTime) {
     $mod.update();
     $mod.draw();
+    window.requestAnimationFrame($mod.main_game);
   };
   this.main_loop = function () {
-    loop($mod.main_game,BPS_TO_TIMER(60));
+    window.requestAnimationFrame($mod.main_game);
   };
   $mod.$main = function () {
     $mod.apple_x = 200;

@@ -3,6 +3,7 @@ program game;
 {
   ALLEGRO.JS.PAS demo game v0.1 by Lainz
   Based on the original demo of ALLEGRO.JS
+  LGPL V3
 
   v0.1
   - Demo working, added a ground checking area, to prevent player go to sky, or
@@ -92,15 +93,16 @@ var
    textout(canvas,font,'Score: ' + FloatToStr(score),10,30,24,makecol(255,255,255),makecol(0,0,0),1);
  end;
 
- procedure main_game();
+ procedure main_game(aTime: TJSDOMHighResTimeStamp);
  begin
    update();
    draw();
+   Window.requestAnimationFrame(@main_game);
  end;
 
  procedure main_loop();
  begin
-   loop(@main_game, BPS_TO_TIMER(60));
+   Window.requestAnimationFrame(@main_game);
  end;
 
 begin

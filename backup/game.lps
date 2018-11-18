@@ -8,7 +8,8 @@
       <Unit0>
         <Filename Value="game.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="10" Y="6"/>
+        <IsVisibleTab Value="True"/>
+        <CursorPos X="42" Y="9"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -25,8 +26,7 @@
       <Unit2>
         <Filename Value="allegrojs.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <CursorPos X="10" Y="5"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
@@ -49,13 +49,14 @@
       <Unit5>
         <Filename Value="C:\fpcupdeluxe\fpc\pas2js\rtl\web.pas"/>
         <UnitName Value="Web"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="1555"/>
-        <CursorPos X="11" Y="1569"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="1592"/>
+        <CursorPos X="67" Y="1603"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit5>
     </Units>
-    <JumpHistory Count="15" HistoryIndex="14">
+    <JumpHistory Count="19" HistoryIndex="18">
       <Position1>
         <Filename Value="game.lpr"/>
         <Caret Line="30" Column="4" TopLine="16"/>
@@ -116,6 +117,22 @@
         <Filename Value="game.lpr"/>
         <Caret Line="32" Column="15" TopLine="18"/>
       </Position15>
+      <Position16>
+        <Filename Value="game.lpr"/>
+        <Caret Line="105" Column="46" TopLine="99"/>
+      </Position16>
+      <Position17>
+        <Filename Value="game.lpr"/>
+        <Caret Line="100" Column="33" TopLine="88"/>
+      </Position17>
+      <Position18>
+        <Filename Value="C:\fpcupdeluxe\fpc\pas2js\rtl\web.pas"/>
+        <Caret Line="1731" Column="14" TopLine="1721"/>
+      </Position18>
+      <Position19>
+        <Filename Value="game.lpr"/>
+        <Caret Line="96" Column="51" TopLine="88"/>
+      </Position19>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
