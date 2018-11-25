@@ -1,18 +1,27 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Game</title>
   <script src="allegro.js"></script>
   <script src="game.js"></script>
 </head>
+
 <body>
   <canvas id="canvas_id" width="640" height="480"></canvas>
   <div id="debug"></div>
   <script>
-  rtl.run();
+    // Utility to Download JSON files
+    const request = async (filename) => {
+      const response = await fetch(filename);
+      const json = await response.json();
+      return json
+    }
+    rtl.run();
 
   </script>
-  
+
 </body>
+
 </html>
