@@ -71,7 +71,7 @@ function request(filename: string): TJSPromise; external name 'request';
 
 var
  //bitmap objects
- man, man_jump, bg: TJSObject;
+ man, man_jump, bg, bgm: TJSObject;
 
  // munching sound effect
  munch: TJSObject;
@@ -108,6 +108,7 @@ var
  procedure update();
  var
   i: integer;
+  new_y: integer;
  begin
    player_spd -= 0.05;
    last_collision_time += 1;
@@ -227,6 +228,8 @@ end;
    level1 := TLevel(data);
    loadResources(level1);
    console.log(level1);
+
+   play_sample(bgm, 1, 1, True);
  end;
 
 begin
@@ -239,6 +242,7 @@ begin
   man_jump := load_bmp('data/jump.png');
   bg := load_bmp('data/bg.png');
   munch := load_sample('data/munch.mp3');
+  bgm := load_sample('data/bgm.wav');
 
   level1p := request('data/level1.json');
 

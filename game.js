@@ -1626,6 +1626,7 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
   this.man = null;
   this.man_jump = null;
   this.bg = null;
+  this.bgm = null;
   this.munch = null;
   this.player_x = 0.0;
   this.player_y = 0.0;
@@ -1724,6 +1725,7 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
     $mod.level1 = rtl.getObject(data);
     $mod.loadResources($mod.level1);
     window.console.log($mod.level1);
+    play_sample($mod.bgm,1,1,true);
     return Result;
   };
   $mod.$main = function () {
@@ -1735,6 +1737,7 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
     $mod.man_jump = load_bmp("data\/jump.png");
     $mod.bg = load_bmp("data\/bg.png");
     $mod.munch = load_sample("data\/munch.mp3");
+    $mod.bgm = load_sample("data\/bgm.wav");
     $mod.level1p = request("data\/level1.json");
     $mod.level1p.then($mod.OnLoadLevel);
     ready($mod.main_loop,null);
