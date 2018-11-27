@@ -43,18 +43,7 @@ type
 
   { TSprite }
 
-  TSprite = class(TJSObject)
-  private
-    Findex: integer; external name 'index';
-    Fx: integer; external name 'x';
-    Fy: integer; external name 'y';
-    public
-      property x: integer read Fx;
-      property y: integer read Fy;
-      property index: integer read Findex write Findex;
-  end;
-
-  TSpriteArray = array of TSprite;
+  TSpriteArray = array of integer;
 
   { TLevel }
 
@@ -107,7 +96,7 @@ var
  // update game logic
  procedure update();
  var
-  i: integer;
+  x, y, i: integer;
   new_y: integer;
  begin
    player_spd -= 0.05;
@@ -154,14 +143,20 @@ var
      end;
    end;
 
-   for i:=0 to Length(level1.sprites)-1 do
+   for y:=0 to 14 do
    begin
-     if collision(Rect(player_x, player_y, 32, 32), Rect(level1.sprites[i].x * 32, level1.sprites[i].y * 32, 32, 32)) then
+     for x:=0 to 19 do
      begin
-       last_collision_time := 0;
-
-       player_y := (level1.sprites[i].y*32)-32;
-       level1.sprites[i].Index := 1;
+       i := x + 20 * y;
+       if level1.sprites[i] <> 0 then
+       begin
+       if collision(Rect(player_x, player_y, 32, 32), Rect(x * 32, y * 32, 32, 32)) then
+         begin
+           last_collision_time := 0;
+           player_y := (y*32)-32;
+           level1.sprites[i] := 2;
+         end;
+       end;
      end;
    end;
 
@@ -178,7 +173,7 @@ var
 // rendering function
  procedure draw();
  var
-   i: integer;
+   x,y,i: integer;
  begin
    // draw background
    simple_blit(bg, canvas, 0, 0);
@@ -187,11 +182,16 @@ var
    textout(canvas,font,'Score: ' + FloatToStr(score),10,30,24,makecol(255,255,255),makecol(0,0,0),1);
 
    score := 0;
-   for i:=0 to Length(level1.sprites)-1 do
+   for y:=0 to 14 do
    begin
-     simple_blit(level1.resources[level1.sprites[i].index].data, canvas, level1.sprites[i].x * 32, level1.sprites[i].y * 32);
-     if level1.sprites[i].index = 1 then
-       score += 1;
+     for x:=0 to 19 do
+     begin
+       i := x + 20 * y;
+       if level1.sprites[i] <> 0 then
+         simple_blit(level1.resources[level1.sprites[i]].data, canvas, x * 32, y * 32);
+       if level1.sprites[i] = 2 then
+         score += 1;
+     end;
    end;
 
    // draw player
@@ -217,7 +217,7 @@ procedure loadResources(level: TLevel);
 var
   i: integer;
 begin
-  for i:=0 to length(level.resources)-1 do
+  for i:=1 to length(level.resources)-1 do
   begin
     level.resources[i].data := load_bmp(level.resources[i].source);
   end;

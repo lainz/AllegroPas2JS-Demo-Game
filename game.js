@@ -1611,12 +1611,6 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
     this.$final = function () {
     };
   });
-  rtl.createClassExt($mod,"TSprite",Object,"",function () {
-    this.$init = function () {
-    };
-    this.$final = function () {
-    };
-  });
   rtl.createClassExt($mod,"TLevel",Object,"",function () {
     this.$init = function () {
     };
@@ -1651,6 +1645,8 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
     return Result;
   };
   this.update = function () {
+    var x = 0;
+    var y = 0;
     var i = 0;
     $mod.player_spd -= 0.05;
     $mod.last_collision_time += 1;
@@ -1678,12 +1674,16 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
         if ($mod.last_right) $mod.player_x += $mod.player_spd;
       };
     };
-    for (var $l1 = 0, $end2 = rtl.length($mod.level1.sprites) - 1; $l1 <= $end2; $l1++) {
-      i = $l1;
-      if ($mod.collision(new $mod.TRect($mod.rect($mod.player_x,$mod.player_y,32,32)),new $mod.TRect($mod.rect($mod.level1.sprites[i].x * 32,$mod.level1.sprites[i].y * 32,32,32)))) {
-        $mod.last_collision_time = 0;
-        $mod.player_y = ($mod.level1.sprites[i].y * 32) - 32;
-        $mod.level1.sprites[i].index = 1;
+    for (y = 0; y <= 14; y++) {
+      for (x = 0; x <= 19; x++) {
+        i = x + (20 * y);
+        if ($mod.level1.sprites[i] !== 0) {
+          if ($mod.collision(new $mod.TRect($mod.rect($mod.player_x,$mod.player_y,32,32)),new $mod.TRect($mod.rect(x * 32,y * 32,32,32)))) {
+            $mod.last_collision_time = 0;
+            $mod.player_y = (y * 32) - 32;
+            $mod.level1.sprites[i] = 2;
+          };
+        };
       };
     };
     if ($mod.player_x < 0) $mod.player_x = 0;
@@ -1692,14 +1692,18 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
     if (($mod.player_y + 32) > SCREEN_H) $mod.player_y = SCREEN_H - 32;
   };
   this.draw = function () {
+    var x = 0;
+    var y = 0;
     var i = 0;
     simple_blit($mod.bg,canvas,0,0);
     textout(canvas,font,"Score: " + pas.SysUtils.FloatToStr($mod.score),10,30,24,makecol(255,255,255,255),makecol(0,0,0,255),1);
     $mod.score = 0;
-    for (var $l1 = 0, $end2 = rtl.length($mod.level1.sprites) - 1; $l1 <= $end2; $l1++) {
-      i = $l1;
-      simple_blit($mod.level1.resources[$mod.level1.sprites[i].index].data,canvas,$mod.level1.sprites[i].x * 32,$mod.level1.sprites[i].y * 32);
-      if ($mod.level1.sprites[i].index === 1) $mod.score += 1;
+    for (y = 0; y <= 14; y++) {
+      for (x = 0; x <= 19; x++) {
+        i = x + (20 * y);
+        if ($mod.level1.sprites[i] !== 0) simple_blit($mod.level1.resources[$mod.level1.sprites[i]].data,canvas,x * 32,y * 32);
+        if ($mod.level1.sprites[i] === 2) $mod.score += 1;
+      };
     };
     if ($mod.last_collision_time > 0) {
       simple_blit($mod.man_jump,canvas,$mod.player_x,$mod.player_y)}
@@ -1715,7 +1719,7 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
   };
   this.loadResources = function (level) {
     var i = 0;
-    for (var $l1 = 0, $end2 = rtl.length(level.resources) - 1; $l1 <= $end2; $l1++) {
+    for (var $l1 = 1, $end2 = rtl.length(level.resources) - 1; $l1 <= $end2; $l1++) {
       i = $l1;
       level.resources[i].data = load_bmp(level.resources[i].source);
     };
