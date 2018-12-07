@@ -1605,6 +1605,7 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
       return (this.x === b.x) && ((this.y === b.y) && ((this.width === b.width) && (this.height === b.height)));
     };
   };
+  this.TRectSide = {"0": "rsLeft", rsLeft: 0, "1": "rsRight", rsRight: 1, "2": "rsTop", rsTop: 2, "3": "rsBottom", rsBottom: 3, "4": "rsNone", rsNone: 4};
   rtl.createClassExt($mod,"TResource",Object,"",function () {
     this.$init = function () {
     };
@@ -1639,16 +1640,38 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
     Result.height = h;
     return Result;
   };
-  this.collision = function (rect1, rect2) {
-    var Result = false;
-    Result = (((rect1.x < (rect2.x + rect2.width)) && ((rect1.x + rect1.width) > rect2.x)) && (rect1.y < (rect2.y + rect2.height))) && ((rect1.height + rect1.y) > rect2.y);
+  this.collide = function (r1, r2) {
+    var Result = 0;
+    var dx = 0.0;
+    var dy = 0.0;
+    var width = 0.0;
+    var height = 0.0;
+    var crossWidth = 0.0;
+    var crossHeight = 0.0;
+    Result = 4;
+    dx = (r1.x + (r1.width / 2)) - (r2.x + (r2.width / 2));
+    dy = (r1.y + (r1.height / 2)) - (r2.y + (r2.height / 2));
+    width = (r1.width + r2.width) / 2;
+    height = (r1.height + r2.height) / 2;
+    crossWidth = width * dy;
+    crossHeight = height * dx;
+    if ((Math.abs(dx) <= width) && (Math.abs(dy) <= height)) if (crossWidth > crossHeight) {
+      if (crossWidth > -crossHeight) {
+        Result = 3}
+       else Result = 0;
+    } else {
+      if (crossWidth > -crossHeight) {
+        Result = 1}
+       else Result = 2;
+    };
     return Result;
   };
   this.update = function () {
     var x = 0;
     var y = 0;
     var i = 0;
-    $mod.player_spd -= 0.05;
+    var c = 0;
+    $mod.player_spd -= 0.5;
     $mod.last_collision_time += 1;
     if ($mod.player_spd > 4) $mod.player_spd = 4;
     if ($mod.player_spd < 0) $mod.player_spd = 0;
@@ -1658,13 +1681,13 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
     };
     if (!(key[KEY_D] == false) || !(key[KEY_RIGHT] == false)) {
       if ($mod.last_left) $mod.player_spd -= 1;
-      $mod.player_spd += 0.1;
+      $mod.player_spd += 1;
       $mod.player_x += $mod.player_spd;
       $mod.last_right = true;
       $mod.last_left = false;
     } else if (!(key[KEY_A] == false) || !(key[KEY_LEFT] == false)) {
       if ($mod.last_right) $mod.player_spd -= 1;
-      $mod.player_spd += 0.1;
+      $mod.player_spd += 1;
       $mod.player_x -= $mod.player_spd;
       $mod.last_left = true;
       $mod.last_right = false;
@@ -1678,10 +1701,20 @@ rtl.module("program",["System","JS","Classes","SysUtils","Web","allegrojs"],func
       for (x = 0; x <= 19; x++) {
         i = x + (20 * y);
         if ($mod.level1.sprites[i] !== 0) {
-          if ($mod.collision(new $mod.TRect($mod.rect($mod.player_x,$mod.player_y,32,32)),new $mod.TRect($mod.rect(x * 32,y * 32,32,32)))) {
-            $mod.last_collision_time = 0;
-            $mod.player_y = (y * 32) - 32;
+          c = $mod.collide(new $mod.TRect($mod.rect($mod.player_x,$mod.player_y,32,32)),new $mod.TRect($mod.rect(x * 32,y * 32,32,32)));
+          if (c !== 4) {
             $mod.level1.sprites[i] = 2;
+            var $tmp1 = c;
+            if ($tmp1 === 2) {
+              $mod.player_y = (y * 32) - 32;
+              $mod.last_collision_time = 0;
+            } else if ($tmp1 === 0) {
+              $mod.player_x = (x * 32) - 33;
+            } else if ($tmp1 === 1) {
+              $mod.player_x = (x * 32) + 33;
+            } else if ($tmp1 === 3) {
+              $mod.player_y = (y * 32) + 33;
+            };
           };
         };
       };

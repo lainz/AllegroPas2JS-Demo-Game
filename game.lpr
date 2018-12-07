@@ -16,13 +16,15 @@ program game;
 {$modeswitch externalclass}
 
 uses
-  JS, Classes, SysUtils, Web, allegrojs;
+  JS, Classes, SysUtils, Web, allegrojs, Math;
 
 type
 
   TRect = record
     x, y, width, height: double;
   end;
+
+  TRectSide = (rsLeft, rsRight, rsTop, rsBottom, rsNone);
 
   { TResource }
 
@@ -93,13 +95,42 @@ var
    (rect1.height + rect1.y > rect2.y);
  end;
 
+ function collide(r1, r2: TRect): TRectSide;
+ var
+   dx, dy, width, height, crossWidth, crossHeight: double;
+ begin
+   result:=rsNone;
+   dx:=(r1.x+r1.width/2)-(r2.x+r2.width/2);
+   dy:=(r1.y+r1.height/2)-(r2.y+r2.height/2);
+   width:=(r1.width+r2.width)/2;
+   height:=(r1.height+r2.height)/2;
+   crossWidth:=width*dy;
+   crossHeight:=height*dx;
+   if(abs(dx)<=width) and (abs(dy)<=height) then
+        if(crossWidth>crossHeight) then
+        begin
+            if (crossWidth>(-crossHeight)) then
+              result:=rsBottom
+            else
+              result:=rsLeft;
+        end
+        else
+        begin
+            if (crossWidth>-(crossHeight)) then
+              result:=rsRight
+            else
+              result:=rsTop;
+        end;
+ end;
+
  // update game logic
  procedure update();
  var
   x, y, i: integer;
   new_y: integer;
+  c: TRectSide;
  begin
-   player_spd -= 0.05;
+   player_spd -= 0.5;
    last_collision_time += 1;
 
    if player_spd > 4 then
@@ -118,7 +149,7 @@ var
    begin
      if last_left then
        player_spd -= 1;
-     player_spd += 0.1;
+     player_spd += 1;
      player_x += player_spd;
      last_right := true;
      last_left := false;
@@ -127,7 +158,7 @@ var
    begin
      if last_right then
        player_spd -= 1;
-     player_spd += 0.1;
+     player_spd += 1;
      player_x -= player_spd;
      last_left := true;
      last_right := false;
@@ -150,11 +181,28 @@ var
        i := x + 20 * y;
        if level1.sprites[i] <> 0 then
        begin
-       if collision(Rect(player_x, player_y, 32, 32), Rect(x * 32, y * 32, 32, 32)) then
+       c := collide(Rect(player_x, player_y, 32, 32), Rect(x * 32, y * 32, 32, 32));
+       if c <> rsNone then
          begin
-           last_collision_time := 0;
-           player_y := (y*32)-32;
+
            level1.sprites[i] := 2;
+           case c of
+             rsTop: begin
+               player_y := (y*32)-32;
+               last_collision_time := 0;
+             end;
+             rsLeft: begin
+               player_x := (x*32)-33;
+               //last_collision_time := 0;
+             end;
+             rsRight: begin
+               player_x := (x*32)+33;
+               //last_collision_time := 0;
+             end;
+             rsBottom: begin
+               player_y := (y*32)+33;
+             end;
+           end;
          end;
        end;
      end;
